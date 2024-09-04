@@ -88,8 +88,8 @@ if [ $# -gt 2 ] ; then
 fi
 
 # Check to see if -s was given
-if [ $# == 2 ] ; then
-    if [[ "$1" -ne "-s" ]] ; then
+if [ $# -eq 2 ] ; then
+    if [ "$1" != "-s" ] ; then
         usage
         exit 1
     fi
