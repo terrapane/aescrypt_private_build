@@ -7,7 +7,7 @@
 
 usage()
 {
-    echo 'usage: private_build <repo URL>'
+    echo 'usage: private_build [-s] <repo URL>'
 }
 
 # Check to see if -s was given
