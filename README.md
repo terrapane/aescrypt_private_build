@@ -19,7 +19,7 @@ Run the script `./private_build` script using a format like the following:
 
 ```
 ./private_build https://github.com/terrapane/aescrypt_cli.git
-./private_build https://github.com/terrapane/aescrypt_gui.git
+./private_build https://github.com/terrapane/aescrypt_linux.git
 ```
 
 The first is for building the desktop (GUI) release, while the second
@@ -36,6 +36,6 @@ statically-linked binaries that are more portable (albiet larger).
 
 ```
 ./private_build -s https://github.com/terrapane/aescrypt_cli.git
-./private_build -s https://github.com/terrapane/aescrypt_gui.git
+./private_build -s https://github.com/terrapane/aescrypt_linux.git
 ```
 
