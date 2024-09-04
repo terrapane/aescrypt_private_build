@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# Create a private release build of the specified AES Crypt repository.  The
+# output will be in build/<repo>.  This directory cannot exit and will be
+# created by this# script.
+#
+
+usage()
+{
+    echo 'usage: private_build <repo URL>'
+}
+
+# Check to see if -s was given
+if [ $# == 2 ] ; then
+    if [[ "$1" -ne "-s" ]] ; then
+        usage
+        exit 1
+    fi
+
+    repository=$2
+else
+    repository=$1
+fi
+
+# Get the repository directory name
+repository_directory=$(basename -s .git "$repository")
+if [ -z "$repository_directory" ] ; then
+    echo "Repository name could not be determined"
+    exit
+fi
+
+mkdir -p build || exit
+
+cd build || exit
+
+docker run \
+    --rm \
+    --user $(id -u):$(id -g) \
+    -v $(pwd):/source \
+    aescrypt_private_build perform_build "$@"
+

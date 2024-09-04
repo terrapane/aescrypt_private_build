@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+# perform_build
+#
+# Fetches the repository specified as the first (and only) parameter,
+# then proceeeds to build the repository using clang, invoke tests,
+# and run cpack to create distribution packages.  It is assumed that
+# the caller will have /source be a volume where the output will be
+# placed.
+#
+
+#
+# usage()
+#
+# Show program usage
+#
+usage()
+{
+    echo 'usage: build [-s] <git repository url>'
+}
+
+#
+# build_and_test()
+#   arguments:
+#       1 - C compiler to use
+#       2 - C++ compiler to use
+#       3 - Build type (Release or Debug)
+#       4 - Linker flags
+#
+#   Comments:
+#       The current working directory should be the repository's directory.
+#
+build_and_test()
+{
+    local c_compiler=$1
+    local cpp_compiler=$2
+    local build_type=$3
+    local linker_flags=$4
+
+    # Take note of the repository path
+    local repository_path=$(pwd)
+
+    # Configure cmake
+    cmake -S $repository_path \
+          -B $repository_path/build \
+          -Wdev -Werror -Wdeprecated \
+          --warn-uninitialized \
+          --warn-unused-vars \
+          -G "Unix Makefiles" \
+          -DCMAKE_EXE_LINKER_FLAGS="$linker_flags" \
+          -DCMAKE_BUILD_TYPE:STRING=$build_type \
+          -DCMAKE_C_COMPILER:STRING=$c_compiler \
+          -DCMAKE_C_FLAGS:STRING="-Wpedantic -Wextra -Werror -Wall" \
+          -DCMAKE_CXX_COMPILER:STRING=$cpp_compiler \
+          -DCMAKE_CXX_FLAGS:STRING="-Wpedantic -Wextra -Werror -Wall" || {
+        exit 1
+    }
+
+    # Build
+    cmake --build $repository_path/build --parallel || {
+        exit 1
+    }
+
+    # Push current directory so we can come back to the source code
+    pushd $repository_path >/dev/null
+
+    cd build || {
+        popd >/dev/null
+        exit 1
+    }
+
+    # Ensure the tests run
+    make test || {
+        echo "******** TESTS FAILED OR THERE ARE NO TESTS ********"
+        exit 1
+    }
+
+    # Restore the source code directory
+    popd >/dev/null
+}
+
+linker_flags=""
+
+# Verify the arguments look sane
+if [ $# -gt 2 ] ; then
+    usage
+    exit 1
+fi
+
+# Check to see if -s was given
+if [ $# == 2 ] ; then
+    if [[ "$1" -ne "-s" ]] ; then
+        usage
+        exit 1
+    fi
+
+    linker_flags="-static"
+
+    shift
+fi
+
+# Store the repository name
+repository=$1
+
+# Clone the repository
+git clone $repository || {
+    exit 1
+}
+
+# Change into the repository directory
+repository_directory=$(basename -s .git "$repository")
+cd $repository_directory || exit 1
+
+# Build a release build
+build_and_test clang clang++ Release $linker_flags || exit 1
+
+# Create packages
+cd build
+cpack
