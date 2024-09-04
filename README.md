@@ -22,8 +22,11 @@ Run the script `./private_build` script using a format like the following:
 ./private_build https://github.com/terrapane/aescrypt_gui.git
 ```
 
-The above would create a build/ directory in the current directory containing
-the release packages.  They would be located in build/<repo>/build/.
+The first is for building the desktop (GUI) release, while the second
+if for building the command-line (CLI) version.
+
+The above would create a `build/` directory in the current directory containing
+the release packages.  They would be located in `build/<repo>/build/`.
 There, you would find a .rpm, .dep, and .tgz package file.
 
 If running the software on an older system, it might be necessary to statically
