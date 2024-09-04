@@ -1,7 +1,7 @@
 FROM fedora:latest
 LABEL org.opencontainers.image.authors="paulej@terrapane.com"
 LABEL org.opencontainers.image.description="Docker-Based Private Build Container"
-LABEL org.opencontainers.image.source="https://github.com/terrapane/private_build.git"
+LABEL org.opencontainers.image.source="https://github.com/terrapane/aescrypt_private_build.git"
 LABEL org.opencontainers.image.licenses="Commercial"
 
 RUN dnf -y update --refresh && \
