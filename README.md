@@ -18,8 +18,8 @@ docker build -t aescrypt_private_build .
 Run the script `./private_build` script using a format like the following:
 
 ```
-./private_build https://github.com/terrapane/aescrypt_cli.git
 ./private_build https://github.com/terrapane/aescrypt_linux.git
+./private_build https://github.com/terrapane/aescrypt_cli.git
 ```
 
 The first is for building the desktop (GUI) release, while the second
@@ -35,7 +35,7 @@ that would invoke a dependency on LGPL.  However, the following would create
 statically-linked binaries that are more portable (albiet larger).
 
 ```
-./private_build -s https://github.com/terrapane/aescrypt_cli.git
 ./private_build -s https://github.com/terrapane/aescrypt_linux.git
+./private_build -s https://github.com/terrapane/aescrypt_cli.git
 ```
 
