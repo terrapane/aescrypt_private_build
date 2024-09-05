@@ -1,8 +1,8 @@
 Private Build
 =============
 
-This container is used to create a private build of AES Crypt.  One may build
-either the desktop (GUI) or command-line (CLI) version.
+This container is used to create a private build of AES Crypt for Linux.  One
+may build either the desktop (GUI) or command-line (CLI) version.
 
 # Creating the build container
 
